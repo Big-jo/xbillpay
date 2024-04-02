@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
@@ -32,6 +32,7 @@ export class UserService {
       } catch (error) {
         duplicateErrorHandler(error, { nameReplacements: { users: 'email' } })
         console.error(error)
+        throw new InternalServerErrorException(error)
       }
     })
 
