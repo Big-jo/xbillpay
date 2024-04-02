@@ -71,22 +71,26 @@ export class WalletService {
     senderWallet.balance -= dto.amount
     recipientWallet.balance += dto.amount
 
-    const newSenderTransaction = this.transactionsRepository.create({
-      amount: dto.amount,
-      description: dto.description,
-      type: TransactionTypes.DEBIT,
-      wallet: senderWallet
-    })
+    senderWallet.transactions.push(
+      this.transactionsRepository.create({
+        amount: dto.amount,
+        description: dto.description,
+        type: TransactionTypes.DEBIT,
+        wallet: senderWallet
+      })
+    )
 
-    const newRecipientTransaction = this.transactionsRepository.create({
-      amount: dto.amount,
-      description: dto.description,
-      recipientWalletId: dto.recipientWalletId,
-      type: TransactionTypes.CREDIT,
-      wallet: recipientWallet
-    })
+    recipientWallet.transactions.push(
+      this.transactionsRepository.create({
+        amount: dto.amount,
+        description: dto.description,
+        recipientWalletId: dto.recipientWalletId,
+        type: TransactionTypes.CREDIT,
+        wallet: recipientWallet
+      })
+    )
 
-    await this.transactionsRepository.save([newSenderTransaction, newRecipientTransaction])
+    await this.walletRepository.save([senderWallet, recipientWallet])
 
     return this.findByUserId(dto.userId);
   }
@@ -100,15 +104,17 @@ export class WalletService {
 
     wallet.balance -= dto.amount
 
-    const newBill = this.billsRepository.create({
-      amount: dto.amount,
-      billType: dto.billType,
-      metaData: JSON.stringify(dto.metaData),
-      recipientPhone: dto.recipientPhone,
-      wallet
-    })
+    wallet.bills.push(
+      this.billsRepository.create({
+        amount: dto.amount,
+        billType: dto.billType,
+        metaData: JSON.stringify(dto.metaData),
+        recipientPhone: dto.recipientPhone,
+        wallet
+      })
+    )
 
-    await this.billsRepository.save(newBill)
+    await this.walletRepository.save(wallet)
 
     return this.findByUserId(dto.userId)
   }

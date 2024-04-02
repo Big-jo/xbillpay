@@ -12,10 +12,10 @@ export class WalletEntity extends AbstractEntity<WalletResponseDto> {
   @Column({ type: 'double precision', default: 0, precision: 8, scale: 3 })
   balance: number;
 
-  @OneToMany(() => TransactionsEntity, transaction => transaction.wallet)
+  @OneToMany(() => TransactionsEntity, transaction => transaction.wallet, { cascade: ['insert'] })
   transactions: TransactionsEntity[];
 
-  @OneToMany(() => BillsEntity, bill => bill.wallet)
+  @OneToMany(() => BillsEntity, bill => bill.wallet, { cascade: ['insert'] })
   bills: BillsEntity[];
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
