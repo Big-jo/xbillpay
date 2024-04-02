@@ -1,0 +1,39 @@
+// {
+//   "version": "0.2.0",
+//   "configurations": [
+//     {
+//       "type": "node",
+//       "request": "launch",
+//       "name": "Debug NX App",
+//       "cwd": "${workspaceFolder}",
+//       "runtimeExecutable": "yarn",
+//       "runtimeArgs": ["nx", "serve", "user-service", "--inspect"],
+//       "outFiles": ["${workspaceFolder}/dist/apps/user-service/**/*.js"],
+//       "console": "integratedTerminal",
+//       "internalConsoleOptions": "neverOpen"
+//     }
+//   ]
+// }
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to NX App",
+      "restart": true,
+      "outFiles": ["${workspaceFolder}/dist/apps/user-service/**/*.js"],
+      "protocol": "inspector",
+      "preLaunchTask": "start-app"
+    },
+    {
+      "type": "npm",
+      "script": "start-app",
+      "problemMatcher": ["$node-watch"],
+      "isBackground": true,
+      "cwd": "${workspaceFolder}",
+      "label": "start-app",
+      "outFiles": ["${workspaceFolder}/dist/apps/user-service/**/*.js"]
+    }
+  ]
+}

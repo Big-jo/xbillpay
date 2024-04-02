@@ -1,0 +1,16 @@
+{
+  "name": "xbillpay-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "implicitDependencies": ["wallet-service"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
+      "options": {
+        "jestConfig": "apps/wallet-service-e2e/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
