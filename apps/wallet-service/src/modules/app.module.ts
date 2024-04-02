@@ -1,17 +1,16 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthMiddleware } from '../core/shared/middlewares/auth.middleware';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import config from '../core/config';
 import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import path from 'path';
+import config from '../core/config';
 import { DatabaseConfig } from '../core/config/database';
 import { SnakeNamingStrategy } from '../core/database/snake-naming.strategy';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import { HttpModule } from '@nestjs/axios';
+import { WalletModule } from './wallet/wallet.module';
 
 @Module({
   imports: [
@@ -36,8 +35,6 @@ import { HttpModule } from '@nestjs/axios';
       },
       inject: [ConfigService],
     }),
-    UserModule,
-    AuthModule,
     JwtModule.registerAsync({
       global: true,
       inject: [ConfigService],
@@ -50,9 +47,16 @@ import { HttpModule } from '@nestjs/axios';
         };
       },
     }),
-    HttpModule,
+    WalletModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('*');
+  }
+}
+

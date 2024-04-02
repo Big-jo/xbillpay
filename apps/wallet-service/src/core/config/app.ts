@@ -31,11 +31,6 @@ export type AppConfig = {
     name: string;
     level: LogLevel;
   };
-  services: {
-    wallet: {
-      url: string;
-    }
-  }
 };
 
 const schema = Joi.object({
@@ -57,11 +52,6 @@ const schema = Joi.object({
       .valid(...logLevels)
       .required(),
   }),
-  services: Joi.object({
-    wallet: Joi.object({
-      url: Joi.string().required()
-    })
-  })
 });
 
 const getPackageInfo = () => {
@@ -86,7 +76,7 @@ export const getConfig = (): AppConfig => {
     version,
     server: {
       host: process.env.HOST || 'localhost',
-      port: parseInt(process.env.PORT, 10) || 8000,
+      port: parseInt(process.env.PORT, 10) || 8001,
     },
     log: {
       name,
@@ -95,11 +85,6 @@ export const getConfig = (): AppConfig => {
     swagger: {
       enabled: process.env.SWAGGER_ENABLED === 'true',
     },
-    services: {
-      wallet: {
-        url: process.env.WALLET_SERVICE_URL || 'http://localhost:8001/api/v1/wallet',
-      }
-    }
   };
 };
 
