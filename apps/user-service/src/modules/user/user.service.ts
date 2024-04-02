@@ -51,6 +51,10 @@ export class UserService {
     return user
   }
 
+  findAll() {
+    return this.userRepository.find({});
+  }
+
   async update(dto: UpdateUserDto) {
     const user = await this.findById(dto.id)
 

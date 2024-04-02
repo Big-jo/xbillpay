@@ -25,11 +25,12 @@ export class WalletController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  async getWallet(@Param('id', ParseUUIDPipe) id: string) {
-    const wallet = await this.walletService.findById(id);
+  @Get(':userId')
+  async getWalletByUserId(@Param('userId', ParseUUIDPipe) id: string) {
+    const wallet = await this.walletService.findByUserId(id);
     return wallet.toDto()
   }
+
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)

@@ -22,6 +22,13 @@ export class UserController {
     return user.toDto();
   }
 
+  @Get()
+  async findAll() {
+    const users = await this.userService.findAll();
+
+    return users.map((user) => user?.toDto());
+  }
+
   @Patch(':id')
   async update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateUserDto) {
     const user = await this.userService.update({ id, ...dto });
